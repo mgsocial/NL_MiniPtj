@@ -7,33 +7,53 @@
     <title>Document</title>
 </head>
 
-<body>
-    <form action="{% url 'recommand' %}" method="POST">
-        {% csrf_token %}
-        검색할 종목 입력 : <input type='text' name='name' />
+<body style="padding: 100px">
+    <div style="display:flex; align-items: center; flex-direction: column;">
+        <div>
+            <form action="{% url 'recommand' %}" method="POST" id='form'>
+                {% csrf_token %}
+                <input type='text' name='name' placeholder='검색 종목을 입력하세요' value='{{request.POST.name}}' />
+                <br>
+
+                <input type='number' id='price' name='price' placeholder="상한 가격을 입력하세요" value="{{request.POST.price}}" />
+                <br>
+                <br>
+                <div style="display:flex; justify-content: center;">
+                    <button id="submit"> 검색 </button>
+                </div>
+
+            </form>
+
+        </div>
         <br>
 
-        상한 가격 입력 : <input type='number' name='price' />
-        <br>
-        <button type='submit' id="submit"> 검색 </button>
+        <div style="visibility: hidden;" id='loadingBox'>
+            로딩중
+        </div>
 
-    </form>
+        <div>
+            {% if stockList %}
+            <table>
+                <th>종목코드</th>
+                <th>종목명</th>
+                <th>현재가</th>
+                <th>전일대비</th>
+                <th>등락률</th>
+                {% for key, value in stockList.items%}
 
-    <div>
+                <tr>
+                    <td>{{value.code}}</td>
+                    <td>{{value.name}}</td>
+                    <td>{{value.price}}</td>
+                    <td>{{value.cprice}}</td>
+                    <td>{{value.cper}}</td>
+                </tr>
 
-    </div>
-    <div style="visibility: hidden;" id='loadingBox'>
-        로딩중
-    </div>
-    <div>
-        {% if stockList %}
-        {% for key, value in stockList.items%}
-        <li>{{value}}</li>
-        
-        <li>{{value.code}}</li>
+                {% endfor %}
+            </table>
 
-        {% endfor %}
-        {% endif %}
+            {% endif %}
+        </div>
     </div>
 </body>
 
@@ -43,8 +63,15 @@
     window.onload = function () {
         let submit = document.getElementById('submit');
         submit.onclick = function () {
+
+            let price = document.getElementById('price');
+            if(price.value === '')
+                price.value = 0
+            
             let loadingBox = document.getElementById('loadingBox');
             loadingBox.style.visibility = 'visible'
+            let form = document.getElementById('form');
+            form.submit();
         }
     };
 

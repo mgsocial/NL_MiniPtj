@@ -50,8 +50,6 @@ def recommend(request) :
 
 
 
-    print(input_stock, '와(과) 관련된 종목')
-    print('종목코드', '종목명', '현재가', '전일대비', '등락률')
     idx = 0
     for c in query : 
         params = (
@@ -68,6 +66,5 @@ def recommend(request) :
         if float(result['nv']) <= price:
             print(result['cd'], result['nm'], result['nv'], result['cv'], result['cr'])
             stockList[str(idx)]={'code' : result['cd'], 'name' : result['nm'], 'price' : result['nv'], 'cprice':result['cv'], 'cper' : result['cr']}
-        print('----------------------------------------')
         idx +=1
     return render(request, 'index.html', {'stockList' : stockList})
