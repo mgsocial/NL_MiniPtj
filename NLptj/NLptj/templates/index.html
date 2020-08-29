@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <form action="{% url 'recommand' %}" method="POST">
+        {% csrf_token %}
+        검색할 종목 입력 : <input type='text' name='name' />
+        <br>
+
+        상한 가격 입력 : <input type='number' name='price' />
+        <br>
+        <button type='submit' id="submit"> 검색 </button>
+
+    </form>
+
+    <div>
+
+    </div>
+    <div style="visibility: hidden;" id='loadingBox'>
+        로딩중
+    </div>
+    <div>
+        {% if stockList %}
+        {% for key, value in stockList.items%}
+        <li>{{value}}</li>
+        
+        <li>{{value.code}}</li>
+
+        {% endfor %}
+        {% endif %}
+    </div>
+</body>
+
+</html>
+
+<script>
+    window.onload = function () {
+        let submit = document.getElementById('submit');
+        submit.onclick = function () {
+            let loadingBox = document.getElementById('loadingBox');
+            loadingBox.style.visibility = 'visible'
+        }
+    };
+
+
+
+</script>
